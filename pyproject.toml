@@ -9,7 +9,7 @@ repository = "https://github.com/JnyJny/bitvector.git"
 packages = [ {include = "bitvector" } ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
