@@ -4,52 +4,7 @@
 import functools
 import operator
 
-from typing import List, Union
-
-from loguru import logger
-
-
-class BitField:
-    """Data Descriptor for accessing named fields in a BitVector.
-
-    class MyBV(BitVector):
-        ...
-        byte0 = BitField(0, 8)
-        byte1 = BitField(8, 8)
-        bit16 = BitField(16)
-        bit17 = BitField(17)
-        pad0  = BitField(18, 4)
-        byte3 = BitField(32, 8)
-    
-    > mybv = MyBV()
-    > mybv.byte0 = 0xff
-    > mybv.bit17 = 1
-    > mybv.byte3 = 0x55
-    > mybv
-    MyBV(value=0x5502ff, length=128)
-
-    """
-
-    def __init__(self, offset: int, width: int = 1):
-        """
-        :param offset: int
-        :param width: int
-        """
-        self.field = slice(offset, offset + width)
-
-    def __get__(self, obj, type=None) -> int:
-
-        value = obj[self.field]
-        logger.debug(f"get {self.name} -> {value}")
-        return value
-
-    def __set__(self, obj, value) -> None:
-        prev = obj[self.field]
-        logger.debug(f"set {self.name}[{self.field}] {prev} -> {value}")
-        obj[self.field] = value
-
-    def __set_name__(self, owner, name) -> None:
-        self.name = name
+from typing import Union
 
 
 @functools.total_ordering
@@ -70,7 +25,13 @@ class BitVector:
         return cls((1 << size) - 1, size=size)
 
     def __init__(self, value: int = 0, size: int = 128):
+        """
+        :param value: int
+        :param size: int
 
+        Raises:
+        - ValueError if size <= 0
+        """
         if size <= 0:
             raise ValueError("Size must be positive")
 
@@ -145,6 +106,8 @@ class BitVector:
         > b[:7] = 0x1    # results in b0 == 1 and the rest of the bits == 0
         
         The difference is subtle and perhaps should not be considered a feature.
+
+        Supports negative indexing.
         """
         try:
             if key < 0:
@@ -237,7 +200,7 @@ class BitVector:
 
     @property
     def bytes(self) -> bytes:
-        """Bytes representation of BitVector."""
+        """Byte array representation of BitVector."""
         n = len(self) // 8 + (1 if len(self) % 8 else 0)
         return self.value.to_bytes(n, "big")
 
