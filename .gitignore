@@ -1,0 +1,14 @@
+*.a
+*~
+\#*
+.\#*
+*.egg-info
+*.dms
+.eggs
+.pytest_cache
+.coverage
+dist
+build
+.venv/*
+tst*
+pip-wheel-metadata/*
