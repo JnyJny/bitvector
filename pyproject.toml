@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "bitvector"
-version = "0.2.0"
+name = "bitvector-for-humans"
+version = "0.3.0"
 description = "A simple bit vector."
 authors = ["JnyJny <erik.oshaughnessy@gmail.com>"]
 license = "Apache-2.0"
