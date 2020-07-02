@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "bitvector-for-humans"
-version = "0.3.0"
-description = "A simple bit vector."
+version = "0.4.0"
+description = "A simple bit vector class for Humans™."
 authors = ["JnyJny <erik.oshaughnessy@gmail.com>"]
 license = "Apache-2.0"
+packages = [ {include = "bitvector" }, {include = "bitvector/**/*.py"},]
 
 [tool.poetry.dependencies]
 python = "^3.7"
