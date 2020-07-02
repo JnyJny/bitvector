@@ -3,7 +3,7 @@
 This simple bit vector implementation aims to make addressing single
 bits a little less fiddly. It can be used by itself to work with bit
 fields in an integer word, but it really starts to shine when you use
-the supplied `BitField` descriptors and subclass `BitVector`:
+the supplied `BitField` descriptor with a subclass of `BitVector`:
 
 ```python
 > from bitvector import BitVector, BitField
@@ -38,6 +38,11 @@ b'\xcc\xbb\xaa\x95'
 
 ```console
 $ pip install bitvector
+```
+
+Or directly from github:
+
+```console
 $ pip install git+https://github.com/JnyJny/bitvector.git
 ```
 
@@ -52,6 +57,8 @@ $ pip install git+https://github.com/JnyJny/bitvector.git
 The tests need expanding and I got lazy when writing the multi-bit
 setting / getting code and it could undoubtedly be improved. Pull
 requests gladly accepted.
+
+
 
 
 
