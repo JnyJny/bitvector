@@ -37,7 +37,9 @@ b'\xcc\xbb\xaa\x95'
 ## Installation
 
 ```console
-$ pip install bitvector
+$ pip install bitvector-for-humans
+$ pydoc bitvector
+...
 ```
 
 Or directly from github:
@@ -58,6 +60,15 @@ The tests need expanding and I got lazy when writing the multi-bit
 setting / getting code and it could undoubtedly be improved. Pull
 requests gladly accepted.
 
+## Other Ways to Implement a Bit Vector
+
+1. Python builtin `ctypes.Structure` allows sub-byte bit fields
+2. Python builtin `struct` provides extensive support for byte manipulations
+3. Python3 IntEnums can be used to build bit field masks
+4. The plain `int` will serve admirably with bitwise operators
+5. Provide cffi bindings to existing bit-twiddling libraries
+6. Use Numpy bool arrays as the "backing store"
+7. Other good ideas I overlooked, forgot about or just plain don't know.
 
 
 

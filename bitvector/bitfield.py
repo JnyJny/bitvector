@@ -4,23 +4,25 @@
 
 class BitField:
     """Data Descriptor for accessing named fields in a BitVector.
-    from bitvector import BitVector, BitField
 
-    class MyBV(BitVector):
-        ...
-        byte0 = BitField(0, 8)
-        byte1 = BitField(8, 8)
-        bit16 = BitField(16)
-        bit17 = BitField(17)
-        pad0  = BitField(18, 4)
-        byte3 = BitField(32, 8)
-    
+    ```python
+    > from bitvector import BitVector, BitField
+    >
+    > class MyBV(BitVector):
+    >     byte0 = BitField(0, 8)
+    >     byte1 = BitField(8, 8)
+    >     bit16 = BitField(16)
+    >     bit17 = BitField(17)
+    >     pad0  = BitField(18, 4)
+    >     byte3 = BitField(32, 8)
+    >
     > mybv = MyBV()
     > mybv.byte0 = 0xff
     > mybv.bit17 = 1
     > mybv.byte3 = 0x55
     > mybv
     MyBV(value=0x5502ff, length=128)
+    ```
 
     """
 

@@ -1,4 +1,4 @@
-"""
+"""Bit Vector for Humans™
 """
 
 from .bitvector import BitVector

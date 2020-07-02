@@ -1,4 +1,4 @@
-"""a vector.. of bits!
+"""A vector.. of bits for Humans™!
 """
 
 import functools
