@@ -33,12 +33,6 @@ MINOR:
 PATCH:
 	@poetry version patch
 
-
-README.md:
-	@typer $(TARGET).__main__ utils docs --name blync --output $@
-	@sed -i '' -e  "s///g" $@
-
-
 update: $(VERSION_FILE)
 	@git add $(PYPROJECT) $(VERSION_FILE)
 	@awk '{print $$3}' $(VERSION_FILE) | xargs git commit -m
