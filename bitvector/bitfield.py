@@ -4,7 +4,7 @@
 
 class BitField:
     """Data Descriptor for accessing named fields in a BitVector.
-    from bitvector imoport BitVector, BitField
+    from bitvector import BitVector, BitField
 
     class MyBV(BitVector):
         ...
