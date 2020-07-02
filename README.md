@@ -5,7 +5,7 @@ bits a little less fiddly. It can be used by itself to work with bit
 fields in an integer word, but it really starts to shine when you use
 the supplied `BitField` descriptors and subclass `BitVector`:
 
-```console
+```python
 > from bitvector import BitVector, BitField
 >
 > class IOTDeviceCommand(BitVector):
