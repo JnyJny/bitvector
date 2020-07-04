@@ -1,4 +1,4 @@
-"""A vector.. of bits for Humans™!
+"""A vector of bits for Humans™!
 """
 
 import functools
@@ -33,10 +33,18 @@ class BitVector:
         - ValueError if size <= 0
         """
         if size <= 0:
-            raise ValueError("Size must be positive")
+            raise ValueError("Size must greater than zero.")
 
         self.MAX = (1 << size) - 1
-        self.value: int = value & self.MAX
+        self.value = value
+
+    @property
+    def value(self) -> int:
+        return getattr(self, "_value", 0)
+
+    @value.setter
+    def value(self, new_value: int) -> None:
+        self._value = new_value & self.MAX
 
     def _getb(self, offset: int) -> int:
         """Retrieves the bit value at offset."""
@@ -102,8 +110,8 @@ class BitVector:
         the value is left shifted and the lsb is added to the next offset
         in the bit field.
 
-        > b[:8] = True   # results in b0 - b7 == 1
-        > b[:7] = 0x1    # results in b0 == 1 and the rest of the bits == 0
+        > b[:8] = True   # results in bit0:bit7 == 0b11111111
+        > b[:8] = 0x1    # results in bit0:bit7 == 0b00000001
         
         The difference is subtle and perhaps should not be considered a feature.
 
@@ -131,27 +139,35 @@ class BitVector:
         except AttributeError:
             raise ValueError("Expected int or slice key") from None
 
-    def __binary_op(self, other, func, return_obj: bool = False, reverse: bool = False):
+    def __binary_op(
+        self, other, func, return_obj: bool = False, check_mismatch: bool = True,
+    ):
         """Calls the supplied function `func` with self and other.
 
         If the user sets return_obj to True, a new BitVector initialized with the
-        results of `func` is returned.  If `reverse` is True, the order of self and other
-        is reversed in the call to `func`.
+        results of `func` is returned. Otherwise the return type is assumed to be
+        `int`.  
 
         :param other: Union[int, BitVector]
         :param func: callable from operator
         :param return_obj: bool
-        :param reverse: bool
         :return: Union[int, bool, BitVector]
         """
-        a, b = (self, other) if not reverse else (other, self)
+
+        # If other is not a BitVector, I assume it's an int. Might be useful to also
+        # accept List[bool]?
+
+        a, b = (self, other)
 
         try:
             retval = func(a.value, b.value)
             if return_obj:
-                retval = self.__class__(retval)
+                size = len(min(a, b, key=len))
+                retval = self.__class__(retval, size=size)
             return retval
         except AttributeError:
+            pass
+        except TypeError:
             pass
 
         retval = func(a.value, b)
@@ -186,14 +202,15 @@ class BitVector:
         try:
             self.value = func(self.value, other.value) & self.MAX
         except AttributeError:
-            pass
-        self.value = func(self.value, other) & self.MAX
+            self.value = func(self.value, other) & self.MAX
         return self
 
+    @property
     def bin(self) -> str:
         """Binary string representation of BitVector."""
-        return bin(self.value)
+        return f"0b{bin(self.value)[2:].zfill(len(self))}"
 
+    @property
     def hex(self) -> str:
         """Hexadecimal string representation of BitVector."""
         return hex(self.value)
@@ -207,32 +224,32 @@ class BitVector:
     __eq__ = functools.partialmethod(__binary_op, func=operator.eq)
     __gt__ = functools.partialmethod(__binary_op, func=operator.gt)
 
-    __add__ = functools.partialmethod(__binary_op, func=operator.add)
-    __radd__ = functools.partialmethod(__binary_op, func=operator.add, reverse=True)
+    __add__ = functools.partialmethod(__binary_op, func=operator.add, return_obj=True)
+    __radd__ = functools.partialmethod(__binary_op, func=operator.add)
     __iadd__ = functools.partialmethod(__inplace_op, func=operator.add)
 
-    __sub__ = functools.partialmethod(__binary_op, func=operator.sub)
-    __rsub__ = functools.partialmethod(__binary_op, func=operator.sub, reverse=True)
+    __sub__ = functools.partialmethod(__binary_op, func=operator.sub, return_obj=True)
+    __rsub__ = functools.partialmethod(__binary_op, func=operator.sub)
     __isub__ = functools.partialmethod(__inplace_op, func=operator.sub)
 
-    __mul__ = functools.partialmethod(__binary_op, func=operator.mul)
-    __rmul__ = functools.partialmethod(__binary_op, func=operator.mul, reverse=True)
+    __mul__ = functools.partialmethod(__binary_op, func=operator.mul, return_obj=True)
+    __rmul__ = functools.partialmethod(__binary_op, func=operator.mul)
     __imul__ = functools.partialmethod(__inplace_op, func=operator.mul)
 
-    __and__ = functools.partialmethod(__binary_op, func=operator.and_)
-    __rand__ = functools.partialmethod(__binary_op, func=operator.and_, reverse=True)
+    __and__ = functools.partialmethod(__binary_op, func=operator.and_, return_obj=True)
+    __rand__ = functools.partialmethod(__binary_op, func=operator.and_)
     __iand__ = functools.partialmethod(__inplace_op, func=operator.and_)
 
-    __or__ = functools.partialmethod(__binary_op, func=operator.or_)
-    __ror__ = functools.partialmethod(__binary_op, func=operator.or_, reverse=True)
+    __or__ = functools.partialmethod(__binary_op, func=operator.or_, return_obj=True)
+    __ror__ = functools.partialmethod(__binary_op, func=operator.or_)
     __ior__ = functools.partialmethod(__inplace_op, func=operator.or_)
 
-    __or__ = functools.partialmethod(__binary_op, func=operator.or_)
-    __ror__ = functools.partialmethod(__binary_op, func=operator.or_, reverse=True)
+    __or__ = functools.partialmethod(__binary_op, func=operator.or_, return_obj=True)
+    __ror__ = functools.partialmethod(__binary_op, func=operator.or_)
     __ior__ = functools.partialmethod(__inplace_op, func=operator.or_)
 
-    __xor__ = functools.partialmethod(__binary_op, func=operator.xor)
-    __rxor__ = functools.partialmethod(__binary_op, func=operator.xor, reverse=True)
+    __xor__ = functools.partialmethod(__binary_op, func=operator.xor, return_obj=True)
+    __rxor__ = functools.partialmethod(__binary_op, func=operator.xor)
     __ixor__ = functools.partialmethod(__inplace_op, func=operator.xor)
 
     __not__ = functools.partialmethod(__unary_op, operator.not_, return_obj=True)
