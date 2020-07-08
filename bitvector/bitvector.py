@@ -44,7 +44,7 @@ class BitVector:
 
     @value.setter
     def value(self, new_value: int) -> None:
-        self._value = new_value & self.MAX
+        self._value = int(new_value) & self.MAX
 
     def _getb(self, offset: int) -> int:
         """Retrieves the bit value at offset."""
@@ -139,9 +139,7 @@ class BitVector:
         except AttributeError:
             raise ValueError("Expected int or slice key") from None
 
-    def __binary_op(
-        self, other, func, return_obj: bool = False, check_mismatch: bool = True,
-    ):
+    def __binary_op(self, other, func, return_obj: bool = False, reverse: bool = False):
         """Calls the supplied function `func` with self and other.
 
         If the user sets return_obj to True, a new BitVector initialized with the
@@ -154,15 +152,10 @@ class BitVector:
         :return: Union[int, bool, BitVector]
         """
 
-        # If other is not a BitVector, I assume it's an int. Might be useful to also
-        # accept List[bool]?
-
-        a, b = (self, other)
-
         try:
-            retval = func(a.value, b.value)
+            retval = func(self.value, other.value)
             if return_obj:
-                size = len(min(a, b, key=len))
+                size = len(min(self, other, key=len))
                 retval = self.__class__(retval, size=size)
             return retval
         except AttributeError:
@@ -170,9 +163,14 @@ class BitVector:
         except TypeError:
             pass
 
-        retval = func(a.value, b)
+        if reverse:
+            return func(other, self.value)
+
+        retval = func(self.value, other)
+
         if return_obj:
             retval = self.__class__(retval)
+
         return retval
 
     def __unary_op(self, func, return_obj: bool = False):
@@ -200,9 +198,9 @@ class BitVector:
         :return: self
         """
         try:
-            self.value = func(self.value, other.value) & self.MAX
+            self.value = func(self.value, other.value)
         except AttributeError:
-            self.value = func(self.value, other) & self.MAX
+            self.value = func(self.value, other)
         return self
 
     @property
@@ -225,19 +223,35 @@ class BitVector:
     __gt__ = functools.partialmethod(__binary_op, func=operator.gt)
 
     __add__ = functools.partialmethod(__binary_op, func=operator.add, return_obj=True)
-    __radd__ = functools.partialmethod(__binary_op, func=operator.add)
+    __radd__ = functools.partialmethod(__binary_op, func=operator.add, reverse=True)
     __iadd__ = functools.partialmethod(__inplace_op, func=operator.add)
 
     __sub__ = functools.partialmethod(__binary_op, func=operator.sub, return_obj=True)
-    __rsub__ = functools.partialmethod(__binary_op, func=operator.sub)
+    __rsub__ = functools.partialmethod(__binary_op, func=operator.sub, reverse=True)
     __isub__ = functools.partialmethod(__inplace_op, func=operator.sub)
 
     __mul__ = functools.partialmethod(__binary_op, func=operator.mul, return_obj=True)
-    __rmul__ = functools.partialmethod(__binary_op, func=operator.mul)
+    __rmul__ = functools.partialmethod(__binary_op, func=operator.mul, reverse=True)
     __imul__ = functools.partialmethod(__inplace_op, func=operator.mul)
 
+    __truediv__ = functools.partialmethod(
+        __binary_op, func=operator.truediv, return_obj=True
+    )
+    __rtruediv__ = functools.partialmethod(
+        __binary_op, func=operator.truediv, reverse=True
+    )
+    __itruediv__ = functools.partialmethod(__inplace_op, func=operator.truediv)
+
+    __floordiv__ = functools.partialmethod(
+        __binary_op, func=operator.floordiv, return_obj=True
+    )
+    __rfloordiv__ = functools.partialmethod(
+        __binary_op, func=operator.floordiv, reverse=True
+    )
+    __ifloordiv__ = functools.partialmethod(__inplace_op, func=operator.floordiv)
+
     __and__ = functools.partialmethod(__binary_op, func=operator.and_, return_obj=True)
-    __rand__ = functools.partialmethod(__binary_op, func=operator.and_)
+    __rand__ = functools.partialmethod(__binary_op, func=operator.and_, reverse=True)
     __iand__ = functools.partialmethod(__inplace_op, func=operator.and_)
 
     __or__ = functools.partialmethod(__binary_op, func=operator.or_, return_obj=True)
