@@ -24,3 +24,13 @@ def alphas() -> int:
 @pytest.fixture
 def fives() -> int:
     return 0x5555_5555_5555_5555_5555_5555_5555_5555
+
+
+@pytest.fixture
+def BV_0() -> BitVector:
+    return BitVector(0)
+
+
+@pytest.fixture
+def BV_1() -> BitVector:
+    return BitVector(1)
