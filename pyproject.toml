@@ -10,6 +10,7 @@ packages = [ {include = "bitvector" } ]
 
 [tool.poetry.dependencies]
 python = "^3.6"
+loguru = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
