@@ -5,6 +5,7 @@ import functools
 import operator
 
 from typing import Union
+from loguru import logger
 
 
 @functools.total_ordering
@@ -152,6 +153,8 @@ class BitVector:
         :return: Union[int, bool, BitVector]
         """
 
+        logger.debug(f"{self} {other} {func} {return_obj} {reverse}")
+
         try:
             retval = func(self.value, other.value)
             if return_obj:
@@ -271,8 +274,12 @@ class BitVector:
     __neg__ = functools.partialmethod(__unary_op, operator.neg, return_obj=True)
     __pos__ = functools.partialmethod(__unary_op, operator.pos, return_obj=True)
 
-    __lshift__ = functools.partialmethod(__binary_op, operator.lshift, return_obj=True)
-    __ilshift__ = functools.partialmethod(__inplace_op, operator.lshift)
+    __lshift__ = functools.partialmethod(
+        __binary_op, func=operator.lshift, return_obj=True
+    )
+    __ilshift__ = functools.partialmethod(__inplace_op, func=operator.lshift)
 
-    __rshift__ = functools.partialmethod(__binary_op, operator.rshift, return_obj=True)
-    __irshift__ = functools.partialmethod(__inplace_op, operator.rshift)
+    __rshift__ = functools.partialmethod(
+        __binary_op, func=operator.rshift, return_obj=True
+    )
+    __irshift__ = functools.partialmethod(__inplace_op, func=operator.rshift)
