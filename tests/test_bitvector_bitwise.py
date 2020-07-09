@@ -31,6 +31,10 @@ def test_bitvector_truthiness(BV_0: BitVector, BV_1: BitVector, BV_SET: BitVecto
     assert 0 not in BV_SET
     assert 1 in BV_SET
 
+    assert +BV_0 == BV_0
+    assert +BV_1 == BV_1
+    assert +BV_SET == BV_SET
+
 
 @pytest.mark.parametrize("value", [1 << p for p in range(0, 128)])
 def test_bitvector_bitwise_and(value: int, BV_0: BitVector, BV_SET: BitVector):
