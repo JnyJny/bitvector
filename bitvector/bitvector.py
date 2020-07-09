@@ -49,10 +49,17 @@ class BitVector:
 
     def _getb(self, offset: int) -> int:
         """Retrieves the bit value at offset."""
+
+        if offset > len(self) - 1:
+            raise IndexError(offset)
+
         return (self.value >> offset) & 0x1
 
     def _setb(self, offset: int) -> None:
         """Sets the bit value at offset."""
+        if offset > (len(self) - 1):
+            raise IndexError(offset)
+
         self.value |= (1 << offset) & self.MAX
 
     def _clrb(self, offset: int) -> None:
@@ -92,7 +99,7 @@ class BitVector:
     def __getitem__(self, key: Union[int, slice]) -> int:
         """Given a key, retrieve a bit or bitfield."""
         try:
-            return self._getb(key & (len(self) - 1))
+            return self._getb(key)
         except TypeError:
             pass
 
@@ -222,6 +229,9 @@ class BitVector:
         n = len(self) // 8 + (1 if len(self) % 8 else 0)
         return self.value.to_bytes(n, "big")
 
+    def __bool__(self):
+        return bool(self.value)
+
     __eq__ = functools.partialmethod(__binary_op, func=operator.eq)
     __gt__ = functools.partialmethod(__binary_op, func=operator.gt)
 
@@ -265,9 +275,9 @@ class BitVector:
     __rxor__ = functools.partialmethod(__binary_op, func=operator.xor)
     __ixor__ = functools.partialmethod(__inplace_op, func=operator.xor)
 
-    __not__ = functools.partialmethod(__unary_op, operator.not_, return_obj=True)
     __invert__ = functools.partialmethod(__unary_op, operator.invert, return_obj=True)
-    __neg__ = functools.partialmethod(__unary_op, operator.neg, return_obj=True)
+    __neg__ = functools.partialmethod(__unary_op, operator.invert, return_obj=True)
+
     __pos__ = functools.partialmethod(__unary_op, operator.pos, return_obj=True)
 
     __lshift__ = functools.partialmethod(
