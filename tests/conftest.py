@@ -19,3 +19,8 @@ def BV_1() -> BitVector:
 @pytest.fixture
 def BV_HI() -> BitVector:
     return BitVector(0x8000_0000_0000_0000_0000_0000_0000_0000)
+
+
+@pytest.fixture
+def BV_SET() -> BitVector:
+    return BitVector(0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF)
