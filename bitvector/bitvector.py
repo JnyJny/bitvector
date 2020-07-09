@@ -23,7 +23,9 @@ class BitVector:
 
     @classmethod
     def ones(cls, size: int = 128):
-        return cls((1 << size) - 1, size=size)
+        bv = cls()
+        bv.set()
+        return bv
 
     def __init__(self, value: int = 0, size: int = 128):
         """
@@ -46,6 +48,14 @@ class BitVector:
     @value.setter
     def value(self, new_value: int) -> None:
         self._value = int(new_value) & self.MAX
+
+    def clear(self):
+        """Clears all bits in the vector to zero."""
+        self._value = 0
+
+    def set(self):
+        """Sets all bits in the vector to one."""
+        self._value = self.MAX
 
     def _getb(self, offset: int) -> int:
         """Retrieves the bit value at offset."""
