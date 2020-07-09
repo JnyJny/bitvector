@@ -261,10 +261,6 @@ class BitVector:
     __ror__ = functools.partialmethod(__binary_op, func=operator.or_)
     __ior__ = functools.partialmethod(__inplace_op, func=operator.or_)
 
-    __or__ = functools.partialmethod(__binary_op, func=operator.or_, return_obj=True)
-    __ror__ = functools.partialmethod(__binary_op, func=operator.or_)
-    __ior__ = functools.partialmethod(__inplace_op, func=operator.or_)
-
     __xor__ = functools.partialmethod(__binary_op, func=operator.xor, return_obj=True)
     __rxor__ = functools.partialmethod(__binary_op, func=operator.xor)
     __ixor__ = functools.partialmethod(__inplace_op, func=operator.xor)
