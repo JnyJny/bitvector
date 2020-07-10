@@ -109,16 +109,21 @@ class BitVector:
     def __getitem__(self, key: Union[int, slice]) -> int:
         """Given a key, retrieve a bit or bitfield."""
         try:
+            if key < 0:
+                key += len(self)
             return self._getb(key)
         except TypeError:
             pass
 
-        value = 0
-        for n, b in enumerate(range(*key.indices(len(self)))):
-            v = self._getb(b)
-            if v:
-                value += 1 << n
-        return value
+        try:
+            value = 0
+            for n, b in enumerate(range(*key.indices(len(self)))):
+                v = self._getb(b)
+                if v:
+                    value += 1 << n
+            return value
+        except AttributeError:
+            raise ValueError(f"Unknown key type: {type(key)}")
 
     def __setitem__(self, key: Union[int, slice], value: Union[int, bool]) -> None:
         """Given a key, set a bit or bitfield to the supplied value.
@@ -179,8 +184,6 @@ class BitVector:
                 retval = self.__class__(retval, size=size)
             return retval
         except AttributeError:
-            pass
-        except TypeError:
             pass
 
         if reverse:
