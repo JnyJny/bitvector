@@ -1,10 +1,9 @@
 """
 """
 
+import pytest
 
 from bitvector import BitVector
-
-import pytest
 
 
 def test_bitvector_repr():
@@ -44,3 +43,16 @@ def test_bitvector_hex_property(given):
 
     assert hex_value.startswith("0x")
     assert int(hex_value, 16) == bv.value
+
+
+@pytest.mark.parametrize("value", [1 << p for p in range(0, 128)])
+def test_bitvector_bytes_property(value):
+
+    bv = BitVector(value)
+    bv_bytes = bv.bytes
+
+    test = int.from_bytes(bv_bytes, "big")
+
+    assert isinstance(bv_bytes, bytes)
+    assert len(bv_bytes) == len(bv) / 8
+    assert test == bv
