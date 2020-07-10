@@ -12,3 +12,4 @@ build
 .venv/*
 tst*
 pip-wheel-metadata/*
+htmlcov/*

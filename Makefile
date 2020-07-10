@@ -18,6 +18,10 @@ all:
 	@echo "push          - pushes commits and tags to origin/master"
 	@echo "publish       - publish package to PyPI"
 
+
+coverage:
+	pytest --cov-report=html --cov=$(TARGET) tests
+
 major: MAJOR update
 
 minor: MINOR update
@@ -57,4 +61,4 @@ minor_release: minor push publish
 release: patch_release
 
 clean:
-	@echo Nothing to cleanup
+	@rm -rf htmlcov
