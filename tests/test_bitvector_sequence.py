@@ -66,3 +66,60 @@ def test_bitvector_get_slice_with_skip(skip: int, BV_SET: BitVector):
 def test_bitvector_set_slice_with_skip(skip, expected, BV_0: BitVector):
 
     BV_0[::skip] = 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF
+
+
+def test_bitvector_reverse():
+
+    given = BitVector(0xAAAA_AAAA_AAAA_AAAA_AAAA_AAAA_AAAA_AAAA)
+
+    result = given[::-1]
+
+    assert result == 0x5555_5555_5555_5555_5555_5555_5555_5555
+
+
+@pytest.mark.parametrize("neg_ndx, pos_ndx", zip(range(-128, 0), range(0, 128)))
+def test_bitvector_negative_index(neg_ndx: int, pos_ndx, BV_SET: BitVector):
+
+    assert BV_SET[pos_ndx] == 1
+    assert BV_SET[neg_ndx] == 1
+
+    BV_SET[neg_ndx] = 0
+    assert BV_SET[pos_ndx] == 0
+
+
+def test_bitvector_access_out_of_bounds(BV_0: BitVector):
+
+    oob = len(BV_0) + 1
+
+    with pytest.raises(IndexError):
+        BV_0[oob]
+
+    with pytest.raises(IndexError):
+        BV_0[oob] = 1
+
+
+def test_bitvector_set_slice_with_bool(BV_SET: BitVector):
+
+    assert BV_SET[0:4] == 0xF
+
+    BV_SET[0:4] = False
+
+    assert BV_SET[0:4] == 0
+
+    BV_SET[0:4] = True
+
+    assert BV_SET[0:4] == 0xF
+
+
+@pytest.mark.parametrize("key", ["key", None, 0.0])
+def test_bitvector_get_with_invalid_key(key: object, BV_0: BitVector):
+
+    with pytest.raises(ValueError):
+        BV_0[key]
+
+
+@pytest.mark.parametrize("key", ["key", None, 0.0])
+def test_bitvector_set_with_invalid_key(key: object, BV_0: BitVector):
+
+    with pytest.raises(ValueError):
+        BV_0[key] = 1
