@@ -1,3 +1,5 @@
+![Pytest 3.7](https://github.com/JnyJny/bitvector/workflows/Pytest%203.7/badge.svg)
+
 # Bit Vectors For Humans™
 
 This simple bit vector implementation aims to make addressing single
