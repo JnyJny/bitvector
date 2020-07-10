@@ -6,6 +6,7 @@ import pytest
 from bitvector import BitVector
 
 
+@pytest.mark.fast
 def test_bitvector_shift_negative(BV_1: BitVector):
 
     with pytest.raises(ValueError):
@@ -15,6 +16,7 @@ def test_bitvector_shift_negative(BV_1: BitVector):
         BV_1 >> -1
 
 
+@pytest.mark.fast
 def test_bitvector_shift_boundries(BV_1: BitVector, BV_HI: BitVector):
 
     result = BV_1 << 128

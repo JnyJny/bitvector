@@ -7,6 +7,7 @@ from bitvector import BitVector
 from itertools import combinations
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("position", list(range(0, 128)))
 def test_bitvector_get_single_bit(position: int, BV_0: BitVector, BV_SET: BitVector):
 
@@ -14,6 +15,7 @@ def test_bitvector_get_single_bit(position: int, BV_0: BitVector, BV_SET: BitVec
     assert BV_SET[position] == 1
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("start,stop", list(combinations(range(0, 128), 2)))
 def test_bitvector_get_slice(start: int, stop: int, BV_0: BitVector, BV_SET: BitVector):
 
@@ -21,6 +23,7 @@ def test_bitvector_get_slice(start: int, stop: int, BV_0: BitVector, BV_SET: Bit
     assert BV_SET[start:stop] != 0
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("position", list(range(0, 128)))
 def test_bitvector_set_single_bit(position: int, BV_0: BitVector, BV_SET: BitVector):
 
@@ -31,6 +34,7 @@ def test_bitvector_set_single_bit(position: int, BV_0: BitVector, BV_SET: BitVec
     assert BV_SET[position] == 0
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("start,stop", list(combinations(range(0, 128), 2)))
 def test_bitvector_set_slice(start: int, stop: int, BV_0: BitVector, BV_SET: BitVector):
 
@@ -41,6 +45,7 @@ def test_bitvector_set_slice(start: int, stop: int, BV_0: BitVector, BV_SET: Bit
     assert BV_SET[start:stop] == 0
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("skip", [1, 2, 4, 8, 16, 32, 64, 128])
 def test_bitvector_get_slice_with_skip(skip: int, BV_SET: BitVector):
 
@@ -49,6 +54,7 @@ def test_bitvector_get_slice_with_skip(skip: int, BV_SET: BitVector):
     assert value.bit_length() == expected and value != 0
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize(
     "skip, expected",
     [
@@ -68,6 +74,7 @@ def test_bitvector_set_slice_with_skip(skip, expected, BV_0: BitVector):
     BV_0[::skip] = 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF
 
 
+@pytest.mark.fast
 def test_bitvector_reverse():
 
     given = BitVector(0xAAAA_AAAA_AAAA_AAAA_AAAA_AAAA_AAAA_AAAA)
@@ -87,6 +94,7 @@ def test_bitvector_negative_index(neg_ndx: int, pos_ndx, BV_SET: BitVector):
     assert BV_SET[pos_ndx] == 0
 
 
+@pytest.mark.fast
 def test_bitvector_access_out_of_bounds(BV_0: BitVector):
 
     oob = len(BV_0) + 1
@@ -98,6 +106,7 @@ def test_bitvector_access_out_of_bounds(BV_0: BitVector):
         BV_0[oob] = 1
 
 
+@pytest.mark.fast
 def test_bitvector_set_slice_with_bool(BV_SET: BitVector):
 
     assert BV_SET[0:4] == 0xF
@@ -111,6 +120,7 @@ def test_bitvector_set_slice_with_bool(BV_SET: BitVector):
     assert BV_SET[0:4] == 0xF
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("key", ["key", None, 0.0])
 def test_bitvector_get_with_invalid_key(key: object, BV_0: BitVector):
 
@@ -118,6 +128,7 @@ def test_bitvector_get_with_invalid_key(key: object, BV_0: BitVector):
         BV_0[key]
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("key", ["key", None, 0.0])
 def test_bitvector_set_with_invalid_key(key: object, BV_0: BitVector):
 

@@ -36,6 +36,7 @@ def test_bitvector_truediv_bitvector(value: int, BV_0: BitVector, BV_1: BitVecto
     assert result == test and result is not test
 
 
+@pytest.mark.fast
 def test_bitvector_itruediv_zeros(BV_0: BitVector, BV_1: BitVector):
 
     with pytest.raises(ZeroDivisionError):

@@ -6,6 +6,7 @@ import pytest
 from bitvector import BitVector
 
 
+@pytest.mark.fast
 def test_bitvector_repr():
 
     bv = BitVector()
@@ -15,6 +16,7 @@ def test_bitvector_repr():
     assert "128" in repr_value
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("given", [0, 0xDEADBEEFBADC0FFEE, (1 << 128) - 1,])
 def test_bitvector_str(given):
 
@@ -25,6 +27,7 @@ def test_bitvector_str(given):
     assert int(str_value, 16) == bv.value
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("given", [0, 0xDEADBEEFBADC0FFEE, (1 << 128) - 1,])
 def test_bitvector_bin_property(given):
 
@@ -35,6 +38,7 @@ def test_bitvector_bin_property(given):
     assert int(bin_value, 2) == bv.value
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("given", [0, 0xDEADBEEFBADC0FFEE, (1 << 128) - 1,])
 def test_bitvector_hex_property(given):
 
@@ -45,6 +49,7 @@ def test_bitvector_hex_property(given):
     assert int(hex_value, 16) == bv.value
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("value", [1 << p for p in range(0, 128)])
 def test_bitvector_bytes_property(value):
 

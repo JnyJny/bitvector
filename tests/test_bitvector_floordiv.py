@@ -36,6 +36,7 @@ def test_bitvector_floordiv_bitvector(value: int, BV_0: BitVector, BV_1: BitVect
     assert result == test and result is not test
 
 
+@pytest.mark.fast
 def test_bitvector_ifloordiv_zeros(BV_0: BitVector, BV_1: BitVector):
 
     with pytest.raises(ZeroDivisionError):

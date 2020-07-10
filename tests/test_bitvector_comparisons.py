@@ -7,6 +7,7 @@ from itertools import permutations
 from bitvector import BitVector
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("scalar, expected", [(0, True), (1, False)])
 def test_bitvector_equal_scalar(scalar, expected):
 
@@ -17,6 +18,7 @@ def test_bitvector_equal_scalar(scalar, expected):
     assert result == expected
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("scalar, expected", [(0, False), (1, True)])
 def test_bitvector_not_equal_scalar(scalar, expected):
 

@@ -6,6 +6,7 @@ import pytest
 from bitvector import BitVector
 
 
+@pytest.mark.fast
 def test_bitvector_method_set(BV_0: BitVector):
 
     assert BV_0 == 0
@@ -13,6 +14,7 @@ def test_bitvector_method_set(BV_0: BitVector):
     assert all(BV_0)
 
 
+@pytest.mark.fast
 def test_bitvector_method_clear(BV_SET: BitVector):
 
     assert all(BV_SET)
@@ -20,6 +22,7 @@ def test_bitvector_method_clear(BV_SET: BitVector):
     assert not any(BV_SET)
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize("offset", list(range(0, 128)))
 def test_bitvector_method_toggle(offset: int, BV_0: BitVector):
 

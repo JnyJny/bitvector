@@ -6,18 +6,21 @@ import pytest
 from bitvector import BitVector, BitField
 
 
+@pytest.mark.fast
 def test_bitvector_zeros_classmethod():
     bv = BitVector.zeros()
     assert bv.value == 0
     assert len(bv) == 128
 
 
+@pytest.mark.fast
 def test_bitvector_ones_classmethod():
     bv = BitVector.ones()
     assert bv.value == 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF
     assert len(bv) == 128
 
 
+@pytest.mark.fast
 def test_bitvector_create_with_no_args():
 
     bv = BitVector()
@@ -34,6 +37,7 @@ def test_bitvector_create_with_value(given):
     assert bv.value == given
 
 
+@pytest.mark.fast
 @pytest.mark.parametrize(
     "given, expected",
     [(-1, ValueError), (0, ValueError), (1, None), (None, TypeError)],
