@@ -5,7 +5,6 @@ import functools
 import operator
 
 from typing import Union
-from loguru import logger
 
 
 @functools.total_ordering
@@ -190,8 +189,6 @@ class BitVector:
         :param return_obj: bool
         :return: Union[int, bool, BitVector]
         """
-
-        logger.debug(f"{self} {other} {func} {return_obj} {reverse}")
 
         try:
             retval = func(self.value, other.value)
