@@ -19,16 +19,27 @@ class BitVector:
 
     @classmethod
     def zeros(cls, size: int = 128):
+        """Create a BitVector initialized with zeros.
+        
+        :param size: int
+        """
+
         return cls(size=size)
 
     @classmethod
     def ones(cls, size: int = 128):
+        """Create a BitVector initialized with ones.
+
+        :param size: int
+        """
+
         bv = cls()
         bv.set()
         return bv
 
     def __init__(self, value: int = 0, size: int = 128):
-        """
+        """Initialize a BitVector with integer value and size in bits.
+
         :param value: int
         :param size: int
 
@@ -43,6 +54,8 @@ class BitVector:
 
     @property
     def value(self) -> int:
+        """The integer value of this BitVector.
+        """
         return getattr(self, "_value", 0)
 
     @value.setter
@@ -83,7 +96,10 @@ class BitVector:
             self._clrb(offset)
 
     def toggle(self, offset: int) -> int:
-        """Toggle the bit at offset in the vector and return the previous value.
+        """Toggle the bit at `offset` in the vector and return the previous value.
+        
+        :param offset: int
+        :return: int
         """
         prev = self._getb(offset)
         self.value ^= (1 << offset) & self.MAX
@@ -192,7 +208,7 @@ class BitVector:
         retval = func(self.value, other)
 
         if return_obj:
-            retval = self.__class__(retval)
+            retval = self.__class__(retval, size=len(self))
 
         return retval
 
@@ -209,7 +225,7 @@ class BitVector:
 
         retval = func(self.value) & self.MAX
         if return_obj:
-            retval = self.__class__(retval)
+            retval = self.__class__(retval, size=len(self))
         return retval
 
     def __inplace_op(self, other, func) -> object:
@@ -242,63 +258,272 @@ class BitVector:
         n = len(self) // 8 + (1 if len(self) % 8 else 0)
         return self.value.to_bytes(n, "big")
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
+        """Returns False if zero else True."""
         return bool(self.value)
 
-    __eq__ = functools.partialmethod(__binary_op, func=operator.eq)
-    __gt__ = functools.partialmethod(__binary_op, func=operator.gt)
+    def __eq__(self, other) -> bool:
+        """Tests equality between BitVector and other.
 
-    __add__ = functools.partialmethod(__binary_op, func=operator.add, return_obj=True)
-    __radd__ = functools.partialmethod(__binary_op, func=operator.add, reverse=True)
-    __iadd__ = functools.partialmethod(__inplace_op, func=operator.add)
+        :param other: Union[BitVector, int]
+        :return: bool
+        """
+        return self.__binary_op(other, operator.eq)
 
-    __sub__ = functools.partialmethod(__binary_op, func=operator.sub, return_obj=True)
-    __rsub__ = functools.partialmethod(__binary_op, func=operator.sub, reverse=True)
-    __isub__ = functools.partialmethod(__inplace_op, func=operator.sub)
+    def __gt__(self, other) -> bool:
+        """True if BitVector is greater than other.
 
-    __mul__ = functools.partialmethod(__binary_op, func=operator.mul, return_obj=True)
-    __rmul__ = functools.partialmethod(__binary_op, func=operator.mul, reverse=True)
-    __imul__ = functools.partialmethod(__inplace_op, func=operator.mul)
+        :param other: Union[BitVector, int]
+        :return: bool
+        """
+        return self.__binary_op(other, operator.gt)
 
-    __truediv__ = functools.partialmethod(
-        __binary_op, func=operator.truediv, return_obj=True
-    )
-    __rtruediv__ = functools.partialmethod(
-        __binary_op, func=operator.truediv, reverse=True
-    )
-    __itruediv__ = functools.partialmethod(__inplace_op, func=operator.truediv)
+    def __add__(self, other):
+        """Add BitVector to other and return a BitVector initialized with the sum.
+        
+        :param other: Union[BitVector|int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.add, return_obj=True)
 
-    __floordiv__ = functools.partialmethod(
-        __binary_op, func=operator.floordiv, return_obj=True
-    )
-    __rfloordiv__ = functools.partialmethod(
-        __binary_op, func=operator.floordiv, reverse=True
-    )
-    __ifloordiv__ = functools.partialmethod(__inplace_op, func=operator.floordiv)
+    def __radd__(self, other) -> int:
+        """Add BitVector to other, returning integer value.
 
-    __and__ = functools.partialmethod(__binary_op, func=operator.and_, return_obj=True)
-    __rand__ = functools.partialmethod(__binary_op, func=operator.and_, reverse=True)
-    __iand__ = functools.partialmethod(__inplace_op, func=operator.and_)
+        :param other: int
+        :return: int
+        """
+        return self.__binary_op(other, operator.add, reverse=True)
 
-    __or__ = functools.partialmethod(__binary_op, func=operator.or_, return_obj=True)
-    __ror__ = functools.partialmethod(__binary_op, func=operator.or_)
-    __ior__ = functools.partialmethod(__inplace_op, func=operator.or_)
+    def __iadd__(self, other):
+        """Add `other` to self in-pace. 
 
-    __xor__ = functools.partialmethod(__binary_op, func=operator.xor, return_obj=True)
-    __rxor__ = functools.partialmethod(__binary_op, func=operator.xor)
-    __ixor__ = functools.partialmethod(__inplace_op, func=operator.xor)
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.add)
 
-    __invert__ = functools.partialmethod(__unary_op, operator.invert, return_obj=True)
-    __neg__ = functools.partialmethod(__unary_op, operator.invert, return_obj=True)
+    def __sub__(self, other):
+        """Subtract other from self and return a BitVector intialized with the difference.
 
-    __pos__ = functools.partialmethod(__unary_op, operator.pos, return_obj=True)
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.sub, return_obj=True)
 
-    __lshift__ = functools.partialmethod(
-        __binary_op, func=operator.lshift, return_obj=True
-    )
-    __ilshift__ = functools.partialmethod(__inplace_op, func=operator.lshift)
+    def __rsub__(self, other):
+        """Subtract this BitVector from an int and return the integer difference.
 
-    __rshift__ = functools.partialmethod(
-        __binary_op, func=operator.rshift, return_obj=True
-    )
-    __irshift__ = functools.partialmethod(__inplace_op, func=operator.rshift)
+        :param other: int
+        :return: int
+        """
+        return self.__binary_op(other, operator.sub, reverse=True)
+
+    def __isub__(self, other):
+        """Subtract other from this BitVector in-place.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__inplace_op(other, operator.sub)
+
+    def __mul__(self, other):
+        """Multiply BitVector with other and return a BitVector initialized with the product.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.mul, return_obj=True)
+
+    def __rmul__(self, other):
+        """Multiply other with the integral value of this BitVector and return an the product.
+
+        :param other: Union[BitVector, int]
+        :return: int
+        """
+        return self.__binary_op(other, operator.mul, reverse=True)
+
+    def __imul__(self, other):
+        """Multiply BitVector with other and update in-place. 
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.mul)
+
+    def __truediv__(self, other):
+        """Divide BitVector with other and return a BitVector initialized with the quotient.
+        :param other: Union[BitVector, int, float]
+        :param: BitVector
+        """
+        return self.__binary_op(other, operator.truediv, return_obj=True)
+
+    def __rtruediv__(self, other):
+        """Divide other with BitVector and return a float quotient.
+        :param other: Union[BitVector, int, float]
+        :return: float
+        """
+        return self.__binary_op(other, operator.truediv, reverse=True)
+
+    def __itruediv__(self, other):
+        """Divide BitVector by other and update in-place.
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.truediv)
+
+    def __floordiv__(self, other):
+        """Divide BitVector with other and return the a BitVector initialized with the rounded quotient.
+
+        :param other: Union[BitVector, int, float]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.floordiv, return_obj=True)
+
+    def __rfloordiv__(self, other):
+        """Divide other by BitVector and return a float quotient.
+
+        :param other: Union[int, float]
+        :return: float
+        """
+        return self.__binary_op(other, operator.floordiv, reverse=True)
+
+    def __ifloordiv__(self, other):
+        """Divide BitVector by other and update in-place.
+
+        :param other: Union[BitVector, int, float]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.floordiv)
+
+    def __and__(self, other):
+        """Performs a bitwise AND of BitVector with other and returns a BitVector initialized with the result.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.and_, return_obj=True)
+
+    def __rand__(self, other):
+        """Performs a bitwise AND of other with BitVector and returns an integer result.
+
+        :param other: Union[BitVector, int]
+        :return: int
+        """
+        return self.__binary_op(other, operator.and_, reverse=True)
+
+    def __iand__(self, other):
+        """Performs a bitwise AND of other with BitVector in-place.
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.and_)
+
+    def __or__(self, other):
+        """Performs a bitwise OR of BitVector with other and returns a BitVector initialized with the result.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.or_, return_obj=True)
+
+    def __ror__(self, other):
+        """Performs a bitwise OR of other with BitVector and returns the integer result.
+
+        :param other: Union[BitVector, int]
+        :return: int
+        """
+        return self.__binary_op(other, operator.or_)
+
+    def __ior__(self, other):
+        """Performs a bitwise OR of other with BitVector in-place.
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.or_)
+
+    def __xor__(self, other):
+        """Performs a bitwise XOR of BitVector with other and returns a BitVector initialized with the result.
+
+        :param other: Union[BitVector, int]
+        """
+        return self.__binary_op(other, operator.xor, return_obj=True)
+
+    def __rxor__(self, other):
+        """Performs a bitwise XOR of other with BitVector and returns the integer result.
+
+        :param other: Union[BitVector, int]
+        :return: int
+        """
+        return self.__binary_op(other, operator.xor)
+
+    def __ixor__(self, other):
+        """Performs a bitwise XOR of other with BitVector in-place.
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.xor)
+
+    def __invert__(self):
+        """Inverts BitVector and returns a new BitVector with the result.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__unary_op(operator.invert, return_obj=True)
+
+    def __neg__(self):
+        """Inverts BitVector and returns a new BitVector with the result.
+
+        >>> x = -BitVector(0, size=16)
+        >>> x.hex
+        0xfffff
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__unary_op(operator.invert, return_obj=True)
+
+    def __pos__(self):
+        """Returns a copy of this BitVector.
+
+        :param other: Union[BitVector, int]
+        """
+        return self.__unary_op(operator.pos, return_obj=True)
+
+    def __lshift__(self, other):
+        """Performs a bitwise left shift of BitVector by other positions and returns
+        a BitVector initialized with the results.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.lshift, return_obj=True)
+
+    def __ilshift__(self, other):
+        """Shifts the contents of BitVector left by other positions in-place.
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.lshift)
+
+    def __rshift__(self, other):
+        """Performs a bitwise right shift of BitVector by other positions and returns
+        a BitVector initialized with the results.
+
+        :param other: Union[BitVector, int]
+        :return: BitVector
+        """
+        return self.__binary_op(other, operator.rshift, return_obj=True)
+
+    def __irshift__(self, other):
+        """Shifts the contents of BitVector right by other positions in-place.
+
+        :param other: Union[BitVector, int]
+        :return: self
+        """
+        return self.__inplace_op(other, operator.rshift)
