@@ -108,9 +108,8 @@ class BitVector:
         return f"{self.__class__.__name__}(value={self!s}, size={len(self)})"
 
     def __str__(self) -> str:
-        nibbles = (len(self) // 4) + 1 if (len(self) % 4) else 0
-        hexstr = "0x{{:0{0}x}}".format(nibbles)
-        return hexstr.format(self.value)
+        nibbles = (len(self) // 4) + (1 if (len(self) % 4) else 0)
+        return "0x" + hex(self.value)[2:].zfill(nibbles)
 
     def __len__(self) -> int:
         """Length of the vector in bits."""
