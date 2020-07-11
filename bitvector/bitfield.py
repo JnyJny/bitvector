@@ -34,13 +34,37 @@ class BitField:
         self.field = slice(offset, offset + width)
 
     def __get__(self, obj, type=None) -> int:
+        return obj[self.field]
 
+    def __set__(self, obj, value) -> None:
+        obj[self.field] = value
+
+    def __set_name__(self, owner, name) -> None:
+        self.name = name
+
+
+class ReadOnlyBitField:
+    """Experimental.
+    """
+
+    def __init__(self, offset: int, width: int = 1, default: int = None):
+        self.field = slice(offset, offset + width)
+        self.default = default & ((1 << width) - 1)
+
+    def __get__(self, obj, type=None) -> int:
         value = obj[self.field]
+
+        if self.default is None:
+            return value
+
+        if value != self.default:
+            obj[self.field] = self.default
+            value = self.default
+
         return value
 
     def __set__(self, obj, value) -> None:
-        prev = obj[self.field]
-        obj[self.field] = value
+        return
 
     def __set_name__(self, owner, name) -> None:
         self.name = name

@@ -2,6 +2,6 @@
 """
 
 from .bitvector import BitVector
-from .bitfield import BitField
+from .bitfield import BitField, ReadOnlyBitField
 
-__all__ = ["BitVector", "BitField"]
+__all__ = ["BitVector", "BitField", "ReadOnlyBitField"]
