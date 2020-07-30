@@ -2,8 +2,29 @@
 """
 
 
-class BitField:
-    """Data Descriptor for accessing named fields in a BitVector.
+class ReadOnlyBitField:
+    """Read-only data descriptor for accessing named fields in a BitVector.
+    """
+
+    def __init__(self, offset: int, width: int = 1):
+        """
+        :param offset: int
+        :param width: int
+        """
+        self.field = slice(offset, offset + width)
+
+    def __set__(self, obj, value) -> None:
+        raise TypeError(f"Read-only field '{self.name}'")
+
+    def __get__(self, obj, type=None) -> int:
+        return obj[self.field]
+
+    def __set_name__(self, owner, name) -> None:
+        self.name = name
+
+
+class BitField(ReadOnlyBitField):
+    """Data descriptor for accessing named fields in a BitVector.
 
     ```python
     > from bitvector import BitVector, BitField
@@ -23,48 +44,7 @@ class BitField:
     > mybv
     MyBV(value=0x5502ff, length=128)
     ```
-
     """
-
-    def __init__(self, offset: int, width: int = 1):
-        """
-        :param offset: int
-        :param width: int
-        """
-        self.field = slice(offset, offset + width)
-
-    def __get__(self, obj, type=None) -> int:
-        return obj[self.field]
 
     def __set__(self, obj, value) -> None:
         obj[self.field] = value
-
-    def __set_name__(self, owner, name) -> None:
-        self.name = name
-
-
-class ReadOnlyBitField:
-    """Experimental.
-    """
-
-    def __init__(self, offset: int, width: int = 1, default: int = None):
-        self.field = slice(offset, offset + width)
-        self.default = default & ((1 << width) - 1)
-
-    def __get__(self, obj, type=None) -> int:
-        value = obj[self.field]
-
-        if self.default is None:
-            return value
-
-        if value != self.default:
-            obj[self.field] = self.default
-            value = self.default
-
-        return value
-
-    def __set__(self, obj, value) -> None:
-        return
-
-    def __set_name__(self, owner, name) -> None:
-        self.name = name
