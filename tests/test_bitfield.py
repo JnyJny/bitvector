@@ -3,7 +3,7 @@
 
 import pytest
 
-from bitvector import BitVector, BitField
+from bitvector import BitVector, BitField, ReadOnlyBitField
 from itertools import combinations
 
 
@@ -100,3 +100,26 @@ def test_bitfield_in_bitvector_subclass_get_values(SixteenBitClass: type):
     assert test.bitD == 1
     assert test.bitE == 0
     assert test.bitF == 1
+
+
+def test_readonly_bitfield_in_bitvector_subclass():
+    class TestClass(BitVector):
+        def __init__(self):
+            super().__init__(value=0xDEADBEEF, size=32)
+
+        dead = BitField(16, 16)
+        beef = ReadOnlyBitField(0, 16)
+
+    test = TestClass()
+
+    assert test.dead == 0xDEAD
+    assert test.beef == 0xBEEF
+
+    test.dead = 0xcafe
+
+    assert test.dead == 0xcafe
+
+    with pytest.raises(TypeError):
+        test.beef = 0x0bad
+
+    assert test.beef == 0xbeef
