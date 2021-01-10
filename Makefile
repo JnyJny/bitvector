@@ -60,5 +60,9 @@ minor_release: minor push publish
 
 release: patch_release
 
+mypy: MYPY= mypy
+mypy:
+	$(MYPY) $(TARGET)
+
 clean:
 	@rm -rf htmlcov
