@@ -46,7 +46,7 @@ b'\xcc\xbb\xaa\x95'
 ## Installation
 
 ```console
-$ pip install bitvector-for-humans
+$ python3 -m pip install bitvector-for-humans
 $ pydoc bitvector
 ...
 ```
@@ -57,11 +57,11 @@ Or directly from github:
 $ pip install git+https://github.com/JnyJny/bitvector.git
 ```
 
-## Motivation
+## Motivations
 
 1. Address sub-byte bits in a less error prone way.
-2. Minimize subdependencies.
-3. Learn something about descriptors. 
+2. Minimize subdependencies (zero is minimized right?).
+3. Learn something about descriptors: ✅. 
 
 ## Caveats
 
@@ -70,7 +70,7 @@ setting / getting code and it could undoubtedly be improved. Pull
 requests gladly accepted.
 
 ## Other Ways to Implement a Bit Vector
-
+<!-- EJO add links to these other things -->
 1. Python builtin `ctypes.Structure` allows sub-byte bit fields
 2. Python builtin `struct` provides extensive support for byte manipulations
 3. Python3 IntEnums can be used to build bit field masks
