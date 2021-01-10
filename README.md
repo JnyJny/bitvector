@@ -1,5 +1,13 @@
 ![Pytest 3.7](https://github.com/JnyJny/bitvector/workflows/Pytest%203.7/badge.svg)
 
+![version][pypi-version]
+![pytest][pytest-action]
+![license][license]
+![monthly-downloads][monthly-downloads]
+![Code style: black][code-style-black]
+
+
+
 # Bit Vectors For Humans™
 
 This simple bit vector implementation aims to make addressing single
@@ -73,6 +81,12 @@ requests gladly accepted.
 7. Other good ideas I overlooked, forgot about or just plain don't know.
 
 
+<!-- badges -->
+[pytest-action]: https://github.com/JnyJny/bitvector/workflows/pytest/badge.svg
+[code-style-black]: https://img.shields.io/badge/code%20style-black-000000.svg
+[pypi-version]: https://img.shields.io/pypi/v/bitvector-for-humans
+[license]: https://img.shields.io/pypi/l/bitvector-for-humans
+[monthly-downloads]: https://img.shields.io/pypi/dm/bitvector-for-humans
 
 
 
