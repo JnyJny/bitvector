@@ -1,5 +1,4 @@
-![Pytest 3.7](https://github.com/JnyJny/bitvector/workflows/Pytest%203.7/badge.svg)
-
+<!-- python3 bitvector bit vector bits bit-twiddling binary -->
 ![version][pypi-version]
 ![pytest][pytest-action]
 ![license][license]
