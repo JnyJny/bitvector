@@ -211,28 +211,6 @@ pytest = ">=4.6"
 testing = ["fields", "hunter", "process-tests (2.0.2)", "six", "pytest-xdist", "virtualenv"]
 
 [[package]]
-name = "pytest-cover"
-version = "3.0.0"
-description = "Pytest plugin for measuring coverage. Forked from `pytest-cov`."
-category = "dev"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-pytest-cov = ">=2.0"
-
-[[package]]
-name = "pytest-coverage"
-version = "0.0"
-description = "Pytest plugin for measuring coverage. Forked from `pytest-cov`."
-category = "dev"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-pytest-cover = "*"
-
-[[package]]
 name = "regex"
 version = "2020.11.13"
 description = "Alternative regular expression module, to replace re."
@@ -287,7 +265,7 @@ testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "79a9d424daee17165e69e99d56a069b90d91873db97bf7e2f0e20e56ede4d68d"
+content-hash = "f09a15e4d939b7be2a2f31c72b722afa1d84244c70e9179f962e4d711fc660fc"
 
 [metadata.files]
 appdirs = [
@@ -420,14 +398,6 @@ pytest = [
 pytest-cov = [
     {file = "pytest-cov-2.10.1.tar.gz", hash = "sha256:47bd0ce14056fdd79f93e1713f88fad7bdcc583dcd7783da86ef2f085a0bb88e"},
     {file = "pytest_cov-2.10.1-py2.py3-none-any.whl", hash = "sha256:45ec2d5182f89a81fc3eb29e3d1ed3113b9e9a873bcddb2a71faaab066110191"},
-]
-pytest-cover = [
-    {file = "pytest-cover-3.0.0.tar.gz", hash = "sha256:5bdb6c1cc3dd75583bb7bc2c57f5e1034a1bfcb79d27c71aceb0b16af981dbf4"},
-    {file = "pytest_cover-3.0.0-py2.py3-none-any.whl", hash = "sha256:578249955eb3b5f3991209df6e532bb770b647743b7392d3d97698dc02f39ebb"},
-]
-pytest-coverage = [
-    {file = "pytest-coverage-0.0.tar.gz", hash = "sha256:db6af2cbd7e458c7c9fd2b4207cee75258243c8a81cad31a7ee8cfad5be93c05"},
-    {file = "pytest_coverage-0.0-py2.py3-none-any.whl", hash = "sha256:dedd084c5e74d8e669355325916dc011539b190355021b037242514dee546368"},
 ]
 regex = [
     {file = "regex-2020.11.13-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:8b882a78c320478b12ff024e81dc7d43c1462aa4a3341c754ee65d857a521f85"},
