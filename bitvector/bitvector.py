@@ -4,22 +4,22 @@
 import functools
 import operator
 
-from typing import Union
+from typing import cast, Union
 
 
 @functools.total_ordering
 class BitVector:
     """A Bit Vector is a list of bits in packed (integer)
     format that can be accessed by indexing into the vector
-    or using a slice (via conventional square brackets 
-    notation). 
+    or using a slice (via conventional square brackets
+    notation).
 
     """
 
     @classmethod
     def zeros(cls, size: int = 128):
         """Create a BitVector initialized with zeros.
-        
+
         :param size: int
         """
 
@@ -53,8 +53,7 @@ class BitVector:
 
     @property
     def value(self) -> int:
-        """The integer value of this BitVector.
-        """
+        """The integer value of this BitVector."""
         return getattr(self, "_value", 0)
 
     @value.setter
@@ -96,7 +95,7 @@ class BitVector:
 
     def toggle(self, offset: int) -> int:
         """Toggle the bit at `offset` in the vector and return the previous value.
-        
+
         :param offset: int
         :return: int
         """
@@ -117,27 +116,28 @@ class BitVector:
             return self._len
         except AttributeError:
             pass
-        self._len = self.MAX.bit_length()
+        self._len: int = self.MAX.bit_length()
         return self._len
 
     def __getitem__(self, key: Union[int, slice]) -> int:
         """Given a key, retrieve a bit or bitfield."""
-        try:
-            if key < 0:
-                key += len(self)
-            return self._getb(key)
-        except TypeError:
-            pass
 
-        try:
+        if isinstance(key, int):
+            offset: int = cast(int, key)
+            if offset < 0:
+                offset += len(self)
+            return self._getb(offset)
+
+        if isinstance(key, slice):
+            rng: slice = cast(slice, key)
             value = 0
-            for n, b in enumerate(range(*key.indices(len(self)))):
+            for n, b in enumerate(range(*rng.indices(len(self)))):
                 v = self._getb(b)
                 if v:
                     value += 1 << n
             return value
-        except AttributeError:
-            raise ValueError(f"Unknown key type: {type(key)}")
+
+        raise ValueError(f"Unknown key type: {type(key)}")
 
     def __setitem__(self, key: Union[int, slice], value: Union[int, bool]) -> None:
         """Given a key, set a bit or bitfield to the supplied value.
@@ -149,20 +149,18 @@ class BitVector:
 
         > b[:8] = True   # results in bit0:bit7 == 0b11111111
         > b[:8] = 0x1    # results in bit0:bit7 == 0b00000001
-        
+
         The difference is subtle and perhaps should not be considered a feature.
 
         Supports negative indexing.
         """
-        try:
-            if key < 0:
-                key += len(self)
+        if isinstance(key, int):
+            offset = int(key)
+            if offset < 0:
+                offset += len(self)
 
-            self._setval(key, value)
+            self._setval(offset, value)
             return
-
-        except TypeError:
-            pass
 
         try:
             if value is True or value is False:
@@ -181,7 +179,7 @@ class BitVector:
 
         If the user sets return_obj to True, a new BitVector initialized with the
         results of `func` is returned. Otherwise the return type is assumed to be
-        `int`.  
+        `int`.
 
         :param other: Union[int, BitVector]
         :param func: callable from operator
@@ -212,9 +210,9 @@ class BitVector:
         """Calls the supplied function `func` with self and returns the result.
 
         If return_obj is True, the return value is a BitVector initialized from
-        the results of `func`. 
+        the results of `func`.
 
-        :param func: callable from operator 
+        :param func: callable from operator
         :param return_obj: bool
         :return: Union[int, BitVector]
         """
@@ -226,7 +224,7 @@ class BitVector:
 
     def __inplace_op(self, other, func) -> object:
         """Calls the supplied binary function `func` with self and other
-        and updates self with the results. 
+        and updates self with the results.
 
         :param other:  Union[int, BitVector]
         :param func: Callable from operator
@@ -276,7 +274,7 @@ class BitVector:
 
     def __add__(self, other):
         """Add BitVector to other and return a BitVector initialized with the sum.
-        
+
         :param other: Union[BitVector|int]
         :return: BitVector
         """
@@ -291,7 +289,7 @@ class BitVector:
         return self.__binary_op(other, operator.add, reverse=True)
 
     def __iadd__(self, other):
-        """Add `other` to self in-pace. 
+        """Add `other` to self in-place.
 
         :param other: Union[BitVector, int]
         :return: self
@@ -339,7 +337,7 @@ class BitVector:
         return self.__binary_op(other, operator.mul, reverse=True)
 
     def __imul__(self, other):
-        """Multiply BitVector with other and update in-place. 
+        """Multiply BitVector with other and update in-place.
 
         :param other: Union[BitVector, int]
         :return: self
