@@ -13,3 +13,5 @@ build
 tst*
 pip-wheel-metadata/*
 htmlcov/*
+.DS_Store
+.envrc
