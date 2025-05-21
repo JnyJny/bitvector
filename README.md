@@ -1,6 +1,6 @@
 <!-- python3 bitvector bit vector bits bit-twiddling binary -->
 ![version][pypi-version]
-![pytest][pytest-action]
+![release][release-action]
 ![license][license]
 ![monthly-downloads][monthly-downloads]
 ![Code style: black][code-style-black]
@@ -81,7 +81,7 @@ requests gladly accepted.
 
 
 <!-- badges -->
-[pytest-action]: https://github.com/JnyJny/bitvector/workflows/pytest/badge.svg
+[release-action]: https://github.com/JnyJny/bitvector/workflows/release/badge.svg
 [code-style-black]: https://img.shields.io/badge/code%20style-black-000000.svg
 [pypi-version]: https://img.shields.io/pypi/v/bitvector-for-humans
 [license]: https://img.shields.io/pypi/l/bitvector-for-humans
