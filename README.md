@@ -1,6 +1,6 @@
 <!-- python3 bitvector bit vector bits bit-twiddling binary -->
 
-![![release][release-badge]][release]
+[![release][release-badge]][release]
 ![version][pypi-version]
 ![release date][release-date]
 ![python version][python-version]
