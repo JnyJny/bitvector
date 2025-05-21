@@ -1,5 +1,4 @@
-"""A vector of bits for Humans™!
-"""
+"""A vector of bits for Humans™!"""
 
 import functools
 import operator

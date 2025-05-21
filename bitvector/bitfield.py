@@ -1,10 +1,8 @@
-"""Access Bits in a BitVector
-"""
+"""Access Bits in a BitVector"""
 
 
 class ReadOnlyBitField:
-    """Read-only data descriptor for accessing named fields in a BitVector.
-    """
+    """Read-only data descriptor for accessing named fields in a BitVector."""
 
     def __init__(self, offset: int, width: int = 1):
         """
