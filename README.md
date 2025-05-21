@@ -1,9 +1,12 @@
 <!-- python3 bitvector bit vector bits bit-twiddling binary -->
+
+![![release][release-badge]][release]
 ![version][pypi-version]
-![release][release-action]
+![release date][release-date]
+![python version][python-version]
 ![license][license]
+![code style: black][code-style-black]
 ![monthly-downloads][monthly-downloads]
-![Code style: black][code-style-black]
 
 
 
@@ -81,12 +84,14 @@ requests gladly accepted.
 
 
 <!-- badges -->
-[release-action]: https://github.com/JnyJny/bitvector/workflows/release/badge.svg
-[code-style-black]: https://img.shields.io/badge/code%20style-black-000000.svg
+[release-badge]: https://github.com/JnyJny/bitvector/actions/workflows/release.yaml/badge.svg
+[release]: https://github.com/JnyJny/bitvector/actions/workflows/release.yaml
 [pypi-version]: https://img.shields.io/pypi/v/bitvector-for-humans
+[release-date]: https://img.shields.io/github/release-date/JnyJny/bitvector
+[python-version]: https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FJnyJny%2Fbitvector%2Fmaster%2Fpyproject.toml
 [license]: https://img.shields.io/pypi/l/bitvector-for-humans
+[code-style-black]: https://img.shields.io/badge/code%20style-black-000000.svg
 [monthly-downloads]: https://img.shields.io/pypi/dm/bitvector-for-humans
-
 
 
 
