@@ -1,0 +1,78 @@
+name: Test and Publish
+
+on:
+  push:
+    branches:
+      - testing
+    tags:
+      - 'v*-test'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test:
+    name: Test Package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv and set Python version.
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.7.5"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run tests - ${{ matrix.python-version }} - ${{ matrix.os }}
+        run: |
+          uv run pytest
+
+  publish:
+    name: Build & Publish
+    needs: test
+    if: |
+      github.ref_type == 'tag' &&
+      startsWith(github.ref, 'refs/tags/v') &&
+      !endsWith(github.ref, '-test') &&
+      success()
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/bitvector-for-humans
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv and set Python version.
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.7.6"
+          python-version: 3.9
+
+      - name: Build package.
+        run: |
+          uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
