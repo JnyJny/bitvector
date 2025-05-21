@@ -88,7 +88,8 @@ requests gladly accepted.
 [release]: https://github.com/JnyJny/bitvector/actions/workflows/release.yaml
 [pypi-version]: https://img.shields.io/pypi/v/bitvector-for-humans
 [release-date]: https://img.shields.io/github/release-date/JnyJny/bitvector
-[python-version]: https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FJnyJny%2Fbitvector%2Fmaster%2Fpyproject.toml
+[python-version]: https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FJnyJny%2Fbitvector%2Frefs%2Fheads%2Fmaster%2Fpyproject.toml
+
 [license]: https://img.shields.io/pypi/l/bitvector-for-humans
 [code-style-black]: https://img.shields.io/badge/code%20style-black-000000.svg
 [monthly-downloads]: https://img.shields.io/pypi/dm/bitvector-for-humans
